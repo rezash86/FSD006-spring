@@ -43,6 +43,13 @@ public class StudentController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("/email")
+    public ResponseEntity<List<StudentGetOutputDTO>> searchNotGmailStudents(){
+        var studentList = studentService.getNotGmailStudents();
+        var result = getStudentOutputDTO(studentList);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     private List<StudentGetOutputDTO> getStudentOutputDTO(List<Student> studentList){
         List<StudentGetOutputDTO> result = new ArrayList<>(studentList.size());
         for(Student student: studentList){

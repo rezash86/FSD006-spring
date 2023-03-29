@@ -36,6 +36,11 @@ public class StudentService {
         return mapper(result);
     }
 
+    public List<Student> getNotGmailStudents(){
+        var result = studentRepository.findNotGmailUsers();
+        return mapper(result);
+    }
+
     private List<Student> mapper(List<StudentEntity> studentEntities){
         List<Student> students = new ArrayList<>(studentEntities.size());
         for(StudentEntity entity: studentEntities){
