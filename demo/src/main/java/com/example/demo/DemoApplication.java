@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.dao.StudentDAO;
 import com.example.demo.dao.StudentImpl;
+import com.example.demo.dao.StudentRepository;
 import com.example.demo.entity.Student;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,17 +24,31 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(StudentDAO studentDAO){
-		return runner -> {
+//	@Bean
+//	public CommandLineRunner commandLineRunner(StudentDAO studentDAO){
+//		return runner -> {
 //			createStudent(studentDAO);
-			createMultipleStudent(studentDAO);
+//			createMultipleStudent(studentDAO);
 //			readStudent(studentDAO);
 //			getAll(studentDAO);
 //			getStudentsByLastName(studentDAO);
 //			updateStudent(studentDAO);
 //			deleteStudent(studentDAO);
-			deleteAllStudents(studentDAO);
+//			deleteAllStudents(studentDAO);
+//		};
+//	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner(StudentRepository studentDAO){
+		return runner -> {
+			createStudent(studentDAO);
+//			createMultipleStudent(studentDAO);
+//			readStudent(studentDAO);
+//			getAll(studentDAO);
+//			getStudentsByLastName(studentDAO);
+//			updateStudent(studentDAO);
+//			deleteStudent(studentDAO);
+//			deleteAllStudents(studentDAO);
 		};
 	}
 
@@ -45,8 +60,18 @@ public class DemoApplication {
 				.email("r.s@jac.com")
 				.build();
 		studentDAO.save(studentEntity);
+
 	}
 
+	private void createStudent(StudentRepository studentRepository){
+		Student studentEntity =  Student
+				.builder()
+				.firstName("reza created by repo")
+				.lastName("shalchi created by repo")
+				.email("r.s@jac.com created by repo")
+				.build();
+		studentRepository.save(studentEntity);
+	}
 	private void createMultipleStudent(StudentDAO studentDAO){
 		Student studentEntity1 =  Student
 				.builder()
