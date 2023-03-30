@@ -1,10 +1,9 @@
 package com.jac.mvcproject.joinexamples.one_to_many;
 
 import com.jac.mvcproject.joinexamples.one_to_many.model.Comment;
-import com.jac.mvcproject.joinexamples.one_to_many.model.CommentRepository;
+import com.jac.mvcproject.joinexamples.one_to_many.repository.CommentRepository;
 import com.jac.mvcproject.joinexamples.one_to_many.model.Post;
-import com.jac.mvcproject.joinexamples.one_to_many.model.PostRepository;
-import jakarta.transaction.Transactional;
+import com.jac.mvcproject.joinexamples.one_to_many.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -43,7 +42,7 @@ public class DemoApplication implements CommandLineRunner {
         //updateData(3L);
 
         insertComment(1L);
-
+        showComments(1L);
 
     }
 
@@ -81,7 +80,6 @@ public class DemoApplication implements CommandLineRunner {
         }
     }
 
-    @Transactional
     private void insertComment(Long postId){
         Optional<Post> optionalPost = postRepository.findById(postId);
 
@@ -92,5 +90,24 @@ public class DemoApplication implements CommandLineRunner {
             commentRepository.save(comment);
         }
         //https://www.javaguides.net/2022/02/spring-data-jpa-one-to-many-bidirectional-mapping.html
+    }
+
+    private void updateComment(Long commentId){
+        Optional<Comment> comment =  commentRepository.findById(commentId);
+        if(comment.isPresent()){
+            Comment commentFetched = comment.get();
+            commentFetched.setText("new text");
+            commentRepository.save(commentFetched);
+        }
+    }
+
+    private void showComments(Long postId){
+//        Optional<Post> post =  postRepository.findById(postId);
+//        if(post.isPresent()){
+//            Post postFetch = post.get();
+//            List<Comment> comments = postFetch.getComments();
+//        }
+
+        commentRepository.findByPostId(postId).forEach(comment -> System.out.println(comment.getText()));
     }
 }

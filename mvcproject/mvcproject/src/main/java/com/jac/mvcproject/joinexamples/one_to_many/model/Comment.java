@@ -18,8 +18,6 @@ public class Comment {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotNull
-    @Lob
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)

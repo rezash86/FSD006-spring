@@ -19,11 +19,9 @@ public class UserProfile {
     private Long id;
 
     @Column(name="phone_number")
-    @Size(max=15)
     private String phoneNumber;
 
     @Column(name="address")
-    @Size(max=100)
     private String address;
 
 //    @OneToOne(cascade = CascadeType.ALL)

@@ -1,12 +1,13 @@
-package com.jac.mvcproject.joinexamples.one_to_many.model;
+package com.jac.mvcproject.joinexamples.many_to_many.model;
 
-import jakarta.annotation.Nullable;
+import com.jac.mvcproject.joinexamples.one_to_many.model.Comment;
 import jakarta.persistence.*;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="posts")
@@ -21,15 +22,13 @@ public class Post {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotNull
     @Column(name = "title", unique = true)
     private String title;
-
 
     private String description;
 
     private String content;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "post")
-    private List<Comment> comments;
+    @ManyToMany(mappedBy = "usedPosts", cascade = CascadeType.ALL)
+    List<Tag> usedTags;
 }

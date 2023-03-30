@@ -19,21 +19,16 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @NotNull
     @Column(name = "first_name")
     private String firstName;
 
-    @NotNull
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "password")
-    @NotNull
+    @Column(name = "password", nullable = false, length = 200)
     private String passWord;
 
-    @Column(name = "email")
-    @Email
-    @NotNull
+    @Column(name = "email", unique = true)
     private String email;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
