@@ -36,7 +36,7 @@ public class User {
     @NotNull
     private String email;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "userprofile_id", referencedColumnName = "id")
     private UserProfile userProfile;
 }
