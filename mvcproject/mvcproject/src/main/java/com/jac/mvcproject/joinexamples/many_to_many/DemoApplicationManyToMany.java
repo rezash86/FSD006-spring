@@ -1,14 +1,10 @@
 package com.jac.mvcproject.joinexamples.many_to_many;
 
+import com.jac.mvcproject.joinexamples.PostRepositoryWithTag;
 import com.jac.mvcproject.joinexamples.many_to_many.model.Post;
 import com.jac.mvcproject.joinexamples.many_to_many.model.Tag;
-import com.jac.mvcproject.joinexamples.many_to_many.model.withnewEntity.CourseRating;
-import com.jac.mvcproject.joinexamples.many_to_many.model.withnewEntity.MyCourse;
-import com.jac.mvcproject.joinexamples.many_to_many.model.withnewEntity.MyStudent;
-import com.jac.mvcproject.joinexamples.many_to_many.repository.PostRepository;
 import com.jac.mvcproject.joinexamples.many_to_many.repository.StudentRepository;
 import com.jac.mvcproject.joinexamples.many_to_many.repository.TagRepository;
-import com.jac.mvcproject.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,22 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class DemoApplicationManyToMany implements CommandLineRunner {
 
-    private final PostRepository postRepository;
+    private final PostRepositoryWithTag postRepository;
     private final TagRepository tagRepository;
 
     private final StudentRepository studentRepository;
 
     @Autowired
-    public DemoApplication(PostRepository postRepository, TagRepository tagRepository, StudentRepository studentRepository) {
+    public DemoApplicationManyToMany(PostRepositoryWithTag postRepository, TagRepository tagRepository, StudentRepository studentRepository) {
         this.postRepository = postRepository;
         this.tagRepository = tagRepository;
         this.studentRepository = studentRepository;
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(DemoApplicationManyToMany.class, args);
     }
 
     @Override

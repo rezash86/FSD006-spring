@@ -3,7 +3,7 @@ package com.jac.mvcproject.joinexamples.one_to_many;
 import com.jac.mvcproject.joinexamples.one_to_many.model.Comment;
 import com.jac.mvcproject.joinexamples.one_to_many.repository.CommentRepository;
 import com.jac.mvcproject.joinexamples.one_to_many.model.Post;
-import com.jac.mvcproject.joinexamples.one_to_many.repository.PostRepository;
+import com.jac.mvcproject.joinexamples.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,20 +13,20 @@ import java.util.List;
 import java.util.Optional;
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class DemoApplicationOneToMany implements CommandLineRunner {
 
     private final PostRepository postRepository;
 
     private final CommentRepository commentRepository;
 
     @Autowired
-    public DemoApplication(PostRepository postRepository, CommentRepository commentRepository) {
+    public DemoApplicationOneToMany(PostRepository postRepository, CommentRepository commentRepository) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(DemoApplicationOneToMany.class, args);
     }
 
     @Override

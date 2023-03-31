@@ -9,17 +9,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class DemoApplicationOneToOne implements CommandLineRunner {
 
     private final UserRepository userRepository;
 
     @Autowired
-    public DemoApplication(UserRepository userRepository) {
+    public DemoApplicationOneToOne(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplication.run(DemoApplicationOneToOne.class, args);
     }
 
     @Override
