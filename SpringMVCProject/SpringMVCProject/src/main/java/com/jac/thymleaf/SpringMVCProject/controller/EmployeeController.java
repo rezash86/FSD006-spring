@@ -2,13 +2,13 @@ package com.jac.thymleaf.SpringMVCProject.controller;
 
 import com.jac.thymleaf.SpringMVCProject.model.Employee;
 import com.jac.thymleaf.SpringMVCProject.service.EmployeeService;
+import com.jac.thymleaf.SpringMVCProject.view.EmployeeView;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +27,10 @@ public class EmployeeController {
     public String listEmployees(Model theModel){
         List<Employee> theEmployees =  employeeService.getAllEmployees();
 
+        //if you want to have something different in the view , forexample Employee
+        //with additional fields like Gender, accountNo that are existing in the model/empl plackage
+        //then you have to convert it to the EmployeeVIEW which is customized class for your purposeses
+
         theModel.addAttribute("employees", theEmployees);
 
         return "employees/list-employees";
@@ -42,9 +46,32 @@ public class EmployeeController {
         return "employees/employee-form";
     }
 
-    @PostMapping("/save")
-    public String saveEmployee(@ModelAttribute("employee") Employee theEmployee){
+    @GetMapping("/showFormForUpdate")
+    public String showFormForUpdate(@RequestParam("empId") Long theId, Model theModel){
+       // get the employee from the service
+        Employee existingEmp = employeeService.getEmployeeById(theId);
+        theModel.addAttribute("employee", existingEmp);
+
+        return "employees/employee-form";
+    }
+
+
+    @PostMapping("/upsert")
+    public String upsertEmployee(@Valid @ModelAttribute("employee") Employee theEmployee, BindingResult result){
+        //https://www.baeldung.com/spring-thymeleaf-error-messages
+        if (result.hasErrors()) {
+            return "employees/employee-form";
+        }
+
         employeeService.save(theEmployee);
+
+        return "redirect:/employee/list";
+    }
+
+    @GetMapping("/delete")
+    public String delete(@RequestParam("empId") Long theId){
+        //delete the employee
+        employeeService.deleteEmployee(theId);
 
         return "redirect:/employee/list";
     }

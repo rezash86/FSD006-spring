@@ -6,7 +6,7 @@
 
     <!--        https://getbootstrap.com/-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
-
+    <link rel="stylesheet" th:href="@{/css/demo.css}" />
     <title>Employee Save Form</title>
 </head>
 <body>
@@ -14,13 +14,22 @@
         <h3>Employee Directory</h3>
         <hr>
         <p class="h4 mb-4">Save Employee</p>
-        <form th:action="@{/employee/save}" th:object="${employee}" method="POST">
+        <form th:action="@{/employee/upsert}" th:object="${employee}" method="POST">
+            <input type="text" th:field="*{id}" class="form-control mb-4 w-25" hidden placeholder="id">
             <input type="text" th:field="*{firstName}" class="form-control mb-4 w-25" placeholder="First Name">
+            <p th:if="${#fields.hasErrors('firstName')}" th:errorclass="error" th:errors="*{firstName}" ></p>
+
             <input type="text" th:field="*{lastName}" class="form-control mb-4 w-25" placeholder="Last Name">
+            <p th:if="${#fields.hasErrors('lastName')}" th:errorclass="error" th:errors="*{lastName}" ></p>
+
             <input type="text" th:field="*{email}" class="form-control mb-4 w-25" placeholder="Email">
+            <p th:if="${#fields.hasErrors('email')}" th:errorclass="error" th:errors="*{email}" ></p>
 
             <button type="submit" class="btn btn-info col-2">Save</button>
         </form>
 
+        <hr>
+
+        <a th:href="@{/employee/list}">Back to the employee List</a>
     </div>
 </body>
