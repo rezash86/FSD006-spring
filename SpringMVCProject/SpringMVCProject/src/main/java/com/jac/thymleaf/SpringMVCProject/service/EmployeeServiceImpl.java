@@ -26,4 +26,10 @@ public class EmployeeServiceImpl implements EmployeeService{
         List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
         return mapperHelper.convertEmployeeEntityListToEmployeeList(employeeEntities);
     }
+
+    @Override
+    public void save(Employee employee) {
+        EmployeeEntity entity = mapperHelper.convertEmployeeToEmployeeEntity(employee);
+        employeeRepository.save(entity);
+    }
 }

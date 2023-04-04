@@ -26,4 +26,8 @@ public class MapperHelper {
         }
         return employees;
     }
+
+    public EmployeeEntity convertEmployeeToEmployeeEntity(Employee employee){
+        return mapper.convertValue(employee, EmployeeEntity.class);
+    }
 }
