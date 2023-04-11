@@ -1,6 +1,7 @@
 package com.jac.thymleaf.SpringMVCProject.service;
 
 import com.jac.thymleaf.SpringMVCProject.entity.EmployeeEntity;
+import com.jac.thymleaf.SpringMVCProject.exception.EmployeeNotFoundException;
 import com.jac.thymleaf.SpringMVCProject.mapper.MapperHelper;
 import com.jac.thymleaf.SpringMVCProject.model.Employee;
 import com.jac.thymleaf.SpringMVCProject.repository.EmployeeRepository;
@@ -13,10 +14,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceImplTest {
@@ -96,5 +97,58 @@ class EmployeeServiceImplTest {
 
         assertNotNull(actual);
         assertEquals(0, actual.size());
+        verify(employeeRepository, times(1)).findAll();
+    }
+
+    @Test
+    void test_save_return_successful(){
+
+        Employee employee = Employee.builder().firstName("testFirstName").lastName("testLastName").email("testEmail").build();
+        EmployeeEntity expectedEmployeeEntity = EmployeeEntity.builder().id(1L).firstName("testFirstName").lastName("testLastName").email("testEmail").build();
+        when(mapperHelper.convertEmployeeToEmployeeEntity(employee)).thenReturn(expectedEmployeeEntity);
+       // doNothing().when(employeeRepository.save(expectedEmployeeEntity));
+        when(employeeRepository.save(expectedEmployeeEntity)).thenReturn(expectedEmployeeEntity);
+
+        var actual = target.save(employee);
+
+        assertEquals(1L, actual);
+        verify(employeeRepository).save(expectedEmployeeEntity);
+    }
+
+    @Test
+    void test_delete_success(){
+        target.deleteEmployee(1L);
+
+        verify(employeeRepository).deleteById(1L);
+    }
+
+    //https://www.baeldung.com/junit-assert-exception
+    @Test
+    void test_getById_throwsException(){
+        Exception exception = assertThrows(EmployeeNotFoundException.class, () -> {
+            when(employeeRepository.findById(2L)).thenReturn(Optional.empty());
+            target.getEmployeeById(2L);
+        });
+
+        String expectedMessage = "the employee could not be found -> 2";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void test_getById_successful(){
+        var expectedEmployee = Employee.builder().id(2L).firstName("X").lastName("y").email("x.y@gmail.com").build();
+
+        var optionalResult = Optional.of(EmployeeEntity.builder().id(2L).firstName("X").lastName("y")
+                .email("x.y@gmail.com").build());
+        when(employeeRepository.findById(2L)).thenReturn(optionalResult);
+        when(mapperHelper.convertEmployeeEntityToEmployee(optionalResult.get())).thenReturn(expectedEmployee);
+
+        target.getEmployeeById(2L);
+
+        assertNotNull(expectedEmployee);
+        assertEquals(expectedEmployee.getId(), 2L);
+
     }
 }

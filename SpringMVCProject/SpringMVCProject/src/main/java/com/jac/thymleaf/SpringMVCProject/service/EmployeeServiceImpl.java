@@ -1,6 +1,7 @@
 package com.jac.thymleaf.SpringMVCProject.service;
 
 import com.jac.thymleaf.SpringMVCProject.entity.EmployeeEntity;
+import com.jac.thymleaf.SpringMVCProject.exception.EmployeeNotFoundException;
 import com.jac.thymleaf.SpringMVCProject.mapper.MapperHelper;
 import com.jac.thymleaf.SpringMVCProject.model.Employee;
 import com.jac.thymleaf.SpringMVCProject.repository.EmployeeRepository;
@@ -29,15 +30,21 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public void save(Employee employee) {
+    public Long save(Employee employee) {
         EmployeeEntity entity = mapperHelper.convertEmployeeToEmployeeEntity(employee);
-        employeeRepository.save(entity);
+        var result = employeeRepository.save(entity);
+        return result.getId();
     }
 
     @Override
     public Employee getEmployeeById(Long empId) {
         Optional<EmployeeEntity> foundEmp = employeeRepository.findById(empId);
-        return foundEmp.map(mapperHelper::convertEmployeeEntityToEmployee).orElse(null);
+        if(foundEmp.isEmpty()){
+            throw new EmployeeNotFoundException("the employee could not be found -> " +  empId);
+        }
+        else{
+            return mapperHelper.convertEmployeeEntityToEmployee(foundEmp.get());
+        }
     }
 
     @Override

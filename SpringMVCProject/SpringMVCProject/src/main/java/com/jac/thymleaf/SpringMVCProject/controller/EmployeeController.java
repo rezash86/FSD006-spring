@@ -1,5 +1,6 @@
 package com.jac.thymleaf.SpringMVCProject.controller;
 
+import com.jac.thymleaf.SpringMVCProject.exception.EmployeeNotFoundException;
 import com.jac.thymleaf.SpringMVCProject.model.Employee;
 import com.jac.thymleaf.SpringMVCProject.service.EmployeeService;
 import com.jac.thymleaf.SpringMVCProject.view.EmployeeView;
@@ -49,10 +50,16 @@ public class EmployeeController {
     @GetMapping("/showFormForUpdate")
     public String showFormForUpdate(@RequestParam("empId") Long theId, Model theModel){
        // get the employee from the service
-        Employee existingEmp = employeeService.getEmployeeById(theId);
-        theModel.addAttribute("employee", existingEmp);
+        try {
+            Employee existingEmp = employeeService.getEmployeeById(theId);
+            theModel.addAttribute("employee", existingEmp);
 
-        return "employees/employee-form";
+            return "employees/employee-form";
+        }catch (EmployeeNotFoundException exception){
+            theModel.addAttribute("employee", null);
+            theModel.addAttribute("exceptionMessage", exception.getMessage());
+            return "employees/employee-form";
+        }
     }
 
 
